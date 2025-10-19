@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>همراه روان - اپلیکیشن مراقبت سلامت</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Vazir', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .overlay {
+            min-height: 100vh;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1, h2, h3, h4 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        button {
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            font-family: 'Vazir', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+            border-radius: 20px;
+            padding: 20px;
+            margin: 15px auto;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 15px 0;
+            border-radius: 10px;
+            border: 2px solid #e1e8ff;
+            font-family: 'Vazir', sans-serif;
+            font-size: 14px;
+            background: rgba(255,255,255,0.9);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .show-password {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .security-code {
+            font-family: monospace;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            padding: 12px;
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+        
+        .sleep-inputs {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .sleep-inputs input {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .medication-section {
+            margin: 15px 0;
+        }
+        
+        .medication-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .med-btn {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #333;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .med-btn.selected {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            border-color: #2c5aa0;
+        }
+        
+        .trigger-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .trigger-btn {
+            background: linear-gradient(135deg, #ffd89b, #19547b);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .trigger-btn.selected {
+            background: linear-gradient(135deg, #ff6b6b, #c44569);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .data-entry {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border-right: 4px solid #ff6b6b;
+        }
+        
+        .quick-time-btn {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #333;
+            padding: 8px 12px;
+            margin: 2px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .time-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .time-separator {
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .patient-data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .data-item {
+            background: rgba(255,255,255,0.8);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .medication-status {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .status-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #e1e8ff;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .status-btn.active {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            border-color: #2c5aa0;
+        }
+        
+        .sync-status {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .error-message {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .patient-item {
+            background: linear-gradient(135deg, #ffd89b, #19547b);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .patient-item:hover {
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <!-- صفحه اصلی -->
+        <div id="home" class="card">
+            <div class="logo">🌈 همراه روان</div>
+            <h1>همراه روان</h1>
+            <h3>اپلیکیشن مراقبت و پایش سلامت</h3>
+            
+            <div id="connectionStatus" class="sync-status">
+                🌐 سیستم ذخیره‌سازی ابری فعال
+            </div>
+            
+            <div style="text-align:center;margin-top:20px;">
+                <button onclick="showSection('patient')" style="background:linear-gradient(135deg, #4ecdc4, #44a08d)">👤 ورود بیمار</button>
+                <button onclick="showSection('doctor')" style="background:linear-gradient(135deg, #667eea, #764ba2)">🏥 ورود پزشک</button>
+            </div>
+        </div>
+
+        <!-- فرم بیمار -->
+        <div id="patient" class="card hidden">
+            <h2 style="color:#ff6b6b">👤 ورود به همراه روان</h2>
+            
+            <div id="patientRegister" class="hidden">
+                <h3 style="color:#4ecdc4">ثبت نام جدید</h3>
+                
+                <label>نام کامل:</label>
+                <input type="text" id="p_fullname" placeholder="نام و نام خانوادگی">
+                
+                <label>نام کاربری:</label>
+                <input type="text" id="p_username" placeholder="برای ورود استفاده میشود">
+                
+                <label>رمز عبور:</label>
+                <div class="password-container">
+                    <input type="password" id="p_password" placeholder="رمز عبور">
+                    <button type="button" class="show-password" onclick="togglePassword('p_password')">👁️</button>
+                </div>
+                
+                <label>تکرار رمز عبور:</label>
+                <div class="password-container">
+                    <input type="password" id="p_password_repeat" placeholder="تکرار رمز عبور">
+                    <button type="button" class="show-password" onclick="togglePassword('p_password_repeat')">👁️</button>
+                </div>
+                
+                <label>کد امنیتی:</label>
+                <div class="security-code" id="securityCode1">1234</div>
+                <input type="text" id="p_security_code" placeholder="کد امنیتی بالا را وارد کنید">
+            </div>
+            
+            <div id="patientLogin">
+                <h3 style="color:#4ecdc4">ورود به حساب</h3>
+                <label>نام کاربری:</label>
+                <input type="text" id="p_login_username" placeholder="نام کاربری">
+                
+                <label>رمز عبور:</label>
+                <div class="password-container">
+                    <input type="password" id="p_login_password" placeholder="رمز عبور">
+                    <button type="button" class="show-password" onclick="togglePassword('p_login_password')">👁️</button>
+                </div>
+            </div>
+            
+            <div id="patientMessages"></div>
+            
+            <div style="text-align:center;margin-top:15px;">
+                <button onclick="registerPatient()" style="background:linear-gradient(135deg, #4ecdc4, #44a08d)">📝 ثبت نام جدید</button>
+                <button onclick="loginPatient()" style="background:linear-gradient(135deg, #ff6b6b, #ee5a52)">🔐 ورود به حساب</button>
+                <button onclick="showSection('home')" style="background:linear-gradient(135deg, #666, #333)">🚪 بازگشت</button>
+            </div>
+            
+            <div style="text-align:center; margin-top:10px;">
+                <button onclick="togglePatientForm()" style="background:linear-gradient(135deg, #a8edea, #fed6e3); color:#333; padding:8px 12px; font-size:12px;">
+                    <span id="toggleFormText">حساب ندارید؟ ثبت نام کنید</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- پنل بیمار -->
+        <div id="patientPanel" class="card hidden">
+            <h2 style="color:#ff6b6b">👤 پنل کاربری همراه روان</h2>
+            <h3 id="welcomePatient">سلام کاربر</h3>
+            
+            <div id="syncStatus" class="sync-status">
+                ✅ داده‌ها در فضای ابری ذخیره می‌شوند
+            </div>
+            
+            <div class="card" style="background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));">
+                <h3 style="color:#4ecdc4">📊 ثبت اطلاعات روزانه</h3>
+                
+                <label>تاریخ امروز (شمسی):</label>
+                <div style="text-align:center; margin:10px 0;">
+                    <button onclick="setTodayDate()" style="background:linear-gradient(135deg, #a8edea, #fed6e3); color:#333;">📅 تنظیم تاریخ امروز</button>
+                </div>
+                <input type="text" id="p_date" readonly placeholder="روی دکمه بالا کلیک کنید">
+                
+                <label>خواب شبانه:</label>
+                <div class="time-inputs">
+                    <input type="number" id="sleep_night_hours" placeholder="ساعت" min="0" max="24" style="text-align:center;">
+                    <span class="time-separator">ساعت</span>
+                    <input type="number" id="sleep_night_minutes" placeholder="دقیقه" min="0" max="59" style="text-align:center;">
+                    <span class="time-separator">دقیقه</span>
+                </div>
+                
+                <label>خواب روزانه:</label>
+                <div class="time-inputs">
+                    <input type="number" id="sleep_day_hours" placeholder="ساعت" min="0" max="24" style="text-align:center;">
+                    <span class="time-separator">ساعت</span>
+                    <input type="number" id="sleep_day_minutes" placeholder="دقیقه" min="0" max="59" style="text-align:center;">
+                    <span class="time-separator">دقیقه</span>
+                </div>
+                
+                <div style="text-align:center; margin:5px 0;">
+                    <button class="quick-time-btn" onclick="setSleepTime('night', 7, 0)">شب: 7 ساعت</button>
+                    <button class="quick-time-btn" onclick="setSleepTime('night', 8, 0)">شب: 8 ساعت</button>
+                    <button class="quick-time-btn" onclick="setSleepTime('day', 1, 30)">روز: 1.5 ساعت</button>
+                </div>
+                
+                <label>حالت روحی:</label>
+                <select id="p_mood">
+                    <option value="1">😔 خیلی افسرده (1)</option>
+                    <option value="2">😟 افسرده (2)</option>
+                    <option value="3" selected>😐 متوسط (3)</option>
+                    <option value="4">🙂 خوب (4)</option>
+                    <option value="5">😊 عالی (5)</option>
+                </select>
+                
+                <div class="medication-section">
+                    <label>وضعیت مصرف دارو:</label>
+                    <div class="medication-status">
+                        <div class="status-btn" id="medsTakenBtn" onclick="setMedicationStatus('taken')">
+                            💊 دارو مصرف کردم
+                        </div>
+                        <div class="status-btn" id="medsNotTakenBtn" onclick="setMedicationStatus('not-taken')">
+                            ❌ دارو مصرف نکردم
+                        </div>
+                    </div>
+                    
+                    <div id="medicationSelection" class="hidden">
+                        <label>داروهای مصرف شده:</label>
+                        <div class="medication-buttons" id="medicationButtons">
+                            <!-- داروها اینجا نمایش داده میشوند -->
+                        </div>
+                        <div style="display:flex; gap:5px; margin-top:10px;">
+                            <input type="text" id="custom_med_name" placeholder="نام دارو" style="flex:2;">
+                            <input type="text" id="custom_med_dose" placeholder="دوز" style="flex:1;">
+                            <button onclick="addCustomMedication()" style="background:linear-gradient(135deg, #4ecdc4, #44a08d); padding:8px;">➕ افزودن</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="medication-section">
+                    <label>عوامل تاثیرگذار:</label>
+                    <div class="trigger-buttons" id="triggerButtons">
+                        <!-- عوامل تاثیرگذار اینجا نمایش داده میشوند -->
+                    </div>
+                    <div style="display:flex; gap:5px; margin-top:10px;">
+                        <input type="text" id="custom_trigger" placeholder="عامل دیگر..." style="flex:1;">
+                        <button onclick="addCustomTrigger()" style="background:linear-gradient(135deg, #ff6b6b, #ee5a52); padding:8px;">➕ افزودن</button>
+                    </div>
+                </div>
+                
+                <label>یادداشت روزانه:</label>
+                <textarea id="p_note" rows="3" placeholder="احساسات و تجربیات خود را بنویسید..."></textarea>
+                
+                <div style="text-align:center;margin-top:15px;">
+                    <button onclick="savePatientData()" style="background:linear-gradient(135deg, #4ecdc4, #44a08d)">💾 ذخیره اطلاعات</button>
+                    <button onclick="showPatientResults()" style="background:linear-gradient(135deg, #ff6b6b, #ee5a52)">📋 مشاهده نتایج</button>
+                    <button onclick="logoutUser()" style="background:linear-gradient(135deg, #666, #333)">🚪 خروج</button>
+                </div>
+            </div>
+            
+            <div id="patientResults" class="hidden">
+                <h3 style="color:#4ecdc4">📋 سابقه اطلاعات شما</h3>
+                <div id="resultsContainer"></div>
+            </div>
+        </div>
+
+        <!-- پنل پزشک -->
+        <div id="doctor" class="card hidden">
+            <h2 style="color:#667eea">🏥 ورود پزشکان</h2>
+            
+            <div style="background:linear-gradient(135deg, #667eea, #764ba2); color:white; padding:15px; border-radius:10px; margin:15px 0;">
+                <h4>دسترسی ادمین</h4>
+                <p style="font-size:12px; margin-top:5px;">برای دسترسی به پنل مدیریت از اطلاعات زیر استفاده کنید:</p>
+                <p style="font-size:12px;">نام کاربری: <strong>doctor</strong> | رمز عبور: <strong>doctor123</strong></p>
+            </div>
+            
+            <label>نام کاربری پزشک:</label>
+            <input type="text" id="doctor_username" placeholder="نام کاربری">
+            
+            <label>رمز عبور:</label>
+            <div class="password-container">
+                <input type="password" id="doctor_password" placeholder="رمز عبور">
+                <button type="button" class="show-password" onclick="togglePassword('doctor_password')">👁️</button>
+            </div>
+            
+            <div id="doctorMessages"></div>
+            
+            <div style="text-align:center;margin-top:20px;">
+                <button onclick="loginDoctor()" style="background:linear-gradient(135deg, #667eea, #764ba2)">🔐 ورود به پنل مدیریت</button>
+                <button onclick="showSection('home')" style="background:linear-gradient(135deg, #666, #333)">🚪 بازگشت</button>
+            </div>
+        </div>
+
+        <!-- پنل مدیریت پزشک -->
+        <div id="doctorPanel" class="card hidden">
+            <h2 style="color:#667eea">🏥 پنل پزشکان همراه روان</h2>
+            <h3 id="welcomeDoctor">سلام دکتر</h3>
+            
+            <div class="sync-status">
+                📊 مدیریت تمام بیماران و داده‌های آنها
+            </div>
+            
+            <div style="text-align:center; margin:15px 0;">
+                <button onclick="loadAllPatients()" style="background:linear-gradient(135deg, #4ecdc4, #44a08d)">
+                    🔄 بارگذاری لیست بیماران
+                </button>
+                <button onclick="exportAllData()" style="background:linear-gradient(135deg, #ff6b6b, #ee5a52)">
+                    📥 خروجی کلی داده‌ها
+                </button>
+            </div>
+            
+            <div id="doctorPatientsList"></div>
+            
+            <div id="doctorPatientDetails" class="hidden">
+                <h3 id="selectedPatientName" style="color:#ff6b6b"></h3>
+                <div id="doctorDataContainer"></div>
+                <div style="text-align:center; margin-top:20px;">
+                    <button onclick="backToPatientsList()" style="background:linear-gradient(135deg, #a8edea, #fed6e3); color:#333">
+                        ↩️ بازگشت به لیست بیماران
+                    </button>
+                    <button onclick="logoutUser()" style="background:linear-gradient(135deg, #666, #333)">🚪 خروج</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== سیستم ذخیره‌سازی ابری ====================
+        
+        // داده‌های برنامه
+        let allPatients = JSON.parse(localStorage.getItem('hamrahRavan_cloud_patients') || '[]');
+        let currentUser = null;
+        let currentUserType = null;
+        let medicationStatus = 'not-taken';
+
+        // داروهای پیش‌فرض
+        const defaultMedications = [
+            { name: "لیتیوم", dose: "300mg", type: "دو قطبی" },
+            { name: "والپروات", dose: "500mg", type: "دو قطبی" },
+            { name: "کاربامازپین", dose: "200mg", type: "دو قطبی" },
+            { name: "لاموتریژین", dose: "100mg", type: "دو قطبی" },
+            { name: "اولانزاپین", dose: "10mg", type: "دو قطبی" },
+            { name: "کوئتیاپین", dose: "100mg", type: "دو قطبی" },
+            { name: "فلوکستین", dose: "20mg", type: "افسردگی" },
+            { name: "سرترالین", dose: "50mg", type: "افسردگی" },
+            { name: "سیتالوپرام", dose: "20mg", type: "افسردگی" },
+            { name: "ونلافاکسین", dose: "75mg", type: "افسردگی" },
+            { name: "دولوکستین", dose: "60mg", type: "افسردگی" },
+            { name: "بوبروپیون", dose: "150mg", type: "افسردگی" }
+        ];
+
+        // عوامل تاثیرگذار پیش‌فرض
+        const defaultTriggers = [
+            "استرس کاری", "مشکل خانوادگی", "کمبود خواب", "تغییر فصل",
+            "مصرف الکل", "قطع دارو", "مشکل مالی", "تنهایی",
+            "اختلاف عاطفی", "فشار اجتماعی", "مشکلات سلامتی",
+            "تغییر روال روزانه", "اخبار بد", "مشکلات خواب"
+        ];
+
+        // ==================== توابع اصلی ====================
+
+        function showSection(sectionName) {
+            // مخفی کردن همه بخش‌ها
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.add('hidden');
+            });
+            
+            // نمایش بخش انتخاب شده
+            document.getElementById(sectionName).classList.remove('hidden');
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        function setMedicationStatus(status) {
+            medicationStatus = status;
+            document.getElementById('medsTakenBtn').classList.toggle('active', status === 'taken');
+            document.getElementById('medsNotTakenBtn').classList.toggle('active', status === 'not-taken');
+            document.getElementById('medicationSelection').classList.toggle('hidden', status === 'not-taken');
+            
+            if (status === 'taken') {
+                initializeMedicationButtons();
+            }
+        }
+
+        function setTodayDate() {
+            const today = new Date();
+            const persianDate = today.toLocaleDateString('fa-IR');
+            document.getElementById('p_date').value = persianDate;
+        }
+
+        function setSleepTime(type, hours, minutes) {
+            if (type === 'night') {
+                document.getElementById('sleep_night_hours').value = hours;
+                document.getElementById('sleep_night_minutes').value = minutes;
+            } else {
+                document.getElementById('sleep_day_hours').value = hours;
+                document.getElementById('sleep_day_minutes').value = minutes;
+            }
+        }
+
+        // ==================== توابع بیمار ====================
+
+        function togglePatientForm() {
+            const registerDiv = document.getElementById('patientRegister');
+            const loginDiv = document.getElementById('patientLogin');
+            const toggleText = document.getElementById('toggleFormText');
+            
+            if (registerDiv.classList.contains('hidden')) {
+                registerDiv.classList.remove('hidden');
+                loginDiv.classList.add('hidden');
+                toggleText.textContent = 'حساب دارید؟ وارد شوید';
+                generateSecurityCode('securityCode1');
+            } else {
+                registerDiv.classList.add('hidden');
+                loginDiv.classList.remove('hidden');
+                toggleText.textContent = 'حساب ندارید؟ ثبت نام کنید';
+            }
+        }
+
+        function generateSecurityCode(elementId) {
+            const code = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById(elementId).textContent = code;
+        }
+
+        function registerPatient() {
+            const fullname = document.getElementById('p_fullname').value.trim();
+            const username = document.getElementById('p_username').value.trim();
+            const password = document.getElementById('p_password').value;
+            const passwordRepeat = document.getElementById('p_password_repeat').value;
+            const securityCode = document.getElementById('p_security_code').value;
+
+            if (!fullname || !username || !password || !passwordRepeat || !securityCode) {
+                showMessage('لطفاً تمام فیلدها را پر کنید', 'error', 'patientMessages');
+                return;
+            }
+
+            if (password !== passwordRepeat) {
+                showMessage('رمزهای عبور یکسان نیستند', 'error', 'patientMessages');
+                return;
+            }
+
+            if (securityCode !== document.getElementById('securityCode1').textContent) {
+                showMessage('کد امنیتی اشتباه است', 'error', 'patientMessages');
+                return;
+            }
+
+            // بررسی تکراری نبودن نام کاربری
+            if (allPatients.find(p => p.username === username)) {
+                showMessage('این نام کاربری قبلاً ثبت شده است', 'error', 'patientMessages');
+                return;
+            }
+
+            const newPatient = {
+                fullname,
+                username,
+                password,
+                data: [],
+                customMeds: [],
+                customTriggers: [],
+                registeredAt: new Date().toLocaleDateString('fa-IR'),
+                lastLogin: new Date().toLocaleString('fa-IR')
+            };
+
+            allPatients.push(newPatient);
+            saveToCloud();
+            showMessage('✅ ثبت نام با موفقیت انجام شد', 'success', 'patientMessages');
+            togglePatientForm();
+        }
+
+        function loginPatient() {
+            const username = document.getElementById('p_login_username').value.trim();
+            const password = document.getElementById('p_login_password').value;
+
+            const patient = allPatients.find(p => p.username === username);
+            
+            if (!patient) {
+                showMessage('⚠️ کاربری با این نام وجود ندارد', 'error', 'patientMessages');
+                return;
+            }
+
+            if (patient.password !== password) {
+                showMessage('❌ رمز عبور اشتباه است', 'error', 'patientMessages');
+                return;
+            }
+
+            // به روز رسانی آخرین ورود
+            patient.lastLogin = new Date().toLocaleString('fa-IR');
+            saveToCloud();
+
+            currentUser = patient;
+            currentUserType = 'patient';
+            
+            document.getElementById('welcomePatient').textContent = `👤 سلام ${patient.fullname}`;
+            showSection('patientPanel');
+            
+            showMessage('✅ با موفقیت وارد شدید', 'success', 'patientMessages');
+        }
+
+        function initializeMedicationButtons() {
+            const container = document.getElementById('medicationButtons');
+            container.innerHTML = '';
+            
+            const patientMeds = currentUser ? currentUser.customMeds || [] : [];
+            const allMeds = [...defaultMedications, ...patientMeds];
+            
+            allMeds.forEach((med, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'med-btn';
+                btn.textContent = `${med.name} (${med.dose})`;
+                btn.onclick = () => {
+                    btn.classList.toggle('selected');
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function initializeTriggerButtons() {
+            const container = document.getElementById('triggerButtons');
+            container.innerHTML = '';
+            
+            const patientTriggers = currentUser ? currentUser.customTriggers || [] : [];
+            const allTriggers = [...defaultTriggers, ...patientTriggers];
+            
+            allTriggers.forEach((trigger, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'trigger-btn';
+                btn.textContent = trigger;
+                btn.onclick = () => {
+                    btn.classList.toggle('selected');
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function addCustomMedication() {
+            const name = document.getElementById('custom_med_name').value.trim();
+            const dose = document.getElementById('custom_med_dose').value.trim();
+            
+            if (name && dose) {
+                if (!currentUser.customMeds) {
+                    currentUser.customMeds = [];
+                }
+                
+                const newMed = { name, dose, type: "سفارشی" };
+                currentUser.customMeds.push(newMed);
+                saveToCloud();
+                initializeMedicationButtons();
+                
+                document.getElementById('custom_med_name').value = '';
+                document.getElementById('custom_med_dose').value = '';
+                
+                showMessage('✅ دارو با موفقیت افزوده شد', 'success', 'patientMessages');
+            }
+        }
+
+        function addCustomTrigger() {
+            const trigger = document.getElementById('custom_trigger').value.trim();
+            
+            if (trigger) {
+                if (!currentUser.customTriggers) {
+                    currentUser.customTriggers = [];
+                }
+                
+                currentUser.customTriggers.push(trigger);
+                saveToCloud();
+                initializeTriggerButtons();
+                
+                document.getElementById('custom_trigger').value = '';
+                showMessage('✅ عامل با موفقیت افزوده شد', 'success', 'patientMessages');
+            }
+        }
+
+        function savePatientData() {
+            if (!currentUser) return;
+
+            const date = document.getElementById('p_date').value;
+            const sleepNightHours = document.getElementById('sleep_night_hours').value;
+            const sleepNightMinutes = document.getElementById('sleep_night_minutes').value;
+            const sleepDayHours = document.getElementById('sleep_day_hours').value;
+            const sleepDayMinutes = document.getElementById('sleep_day_minutes').value;
+            const mood = document.getElementById('p_mood').value;
+            const note = document.getElementById('p_note').value.trim();
+
+            if (!date || !sleepNightHours || !mood) {
+                showMessage('لطفاً فیلدهای ضروری را پر کنید', 'error', 'patientMessages');
+                return;
+            }
+
+            // جمع‌آوری داروهای انتخاب شده
+            let medicationsInfo = '';
+            if (medicationStatus === 'taken') {
+                const selectedMeds = [];
+                document.querySelectorAll('#medicationButtons .med-btn.selected').forEach(btn => {
+                    selectedMeds.push(btn.textContent);
+                });
+                medicationsInfo = selectedMeds.join('، ') || 'دارو مصرف شده (بدون مشخص کردن نوع)';
+            } else {
+                medicationsInfo = '❌ دارو مصرف نکرده';
+            }
+
+            // جمع‌آوری عوامل تاثیرگذار انتخاب شده
+            const selectedTriggers = [];
+            document.querySelectorAll('#triggerButtons .trigger-btn.selected').forEach(btn => {
+                selectedTriggers.push(btn.textContent);
+            });
+
+            const entry = {
+                date,
+                sleepNightHours,
+                sleepNightMinutes,
+                sleepDayHours,
+                sleepDayMinutes,
+                mood,
+                medications: medicationsInfo,
+                medicationStatus: medicationStatus,
+                triggers: selectedTriggers.join('، '),
+                note,
+                timestamp: new Date().toISOString()
+            };
+
+            currentUser.data.push(entry);
+            saveToCloud();
+            
+            showMessage('✅ اطلاعات با موفقیت ذخیره شد', 'success', 'patientMessages');
+            
+            // پاک کردن فیلدها
+            document.getElementById('sleep_night_hours').value = '';
+            document.getElementById('sleep_night_minutes').value = '';
+            document.getElementById('sleep_day_hours').value = '';
+            document.getElementById('sleep_day_minutes').value = '';
+            document.getElementById('p_note').value = '';
+            document.querySelectorAll('#medicationButtons .med-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelectorAll('#triggerButtons .trigger-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            setMedicationStatus('not-taken');
+        }
+
+        function showPatientResults() {
+            if (!currentUser || currentUser.data.length === 0) {
+                showMessage('هنوز اطلاعاتی برای نمایش وجود ندارد', 'error', 'patientMessages');
+                return;
+            }
+
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+            
+            // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+            const sortedData = [...currentUser.data].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+            
+            sortedData.forEach((entry, index) => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'data-entry';
+                
+                const moodText = getMoodText(entry.mood);
+                const totalSleepNight = `${entry.sleepNightHours || 0} ساعت ${entry.sleepNightMinutes || 0} دقیقه`;
+                const totalSleepDay = `${entry.sleepDayHours || 0} ساعت ${entry.sleepDayMinutes || 0} دقیقه`;
+                
+                const medsStatus = entry.medicationStatus === 'not-taken' ? 
+                    '<div style="color: #ff6b6b; font-weight: bold;">❌ دارو مصرف نکرده</div>' :
+                    `<div style="color: #4ecdc4; font-weight: bold;">💊 ${entry.medications}</div>`;
+                
+                entryDiv.innerHTML = `
+                    <div style="background:linear-gradient(135deg, #ff6b6b, #ee5a52); color:white; padding:10px; border-radius:8px; margin-bottom:10px;">
+                        <strong>📅 تاریخ: ${entry.date}</strong>
+                    </div>
+                    <div class="patient-data-grid">
+                        <div class="data-item">
+                            <strong>🌙 خواب شب</strong><br>
+                            ${totalSleepNight}
+                        </div>
+                        <div class="data-item">
+                            <strong>☀️ خواب روز</strong><br>
+                            ${totalSleepDay}
+                        </div>
+                        <div class="data-item">
+                            <strong>😊 حالت روحی</strong><br>
+                            ${moodText}
+                        </div>
+                        <div class="data-item">
+                            <strong>💊 وضعیت دارو</strong><br>
+                            ${medsStatus}
+                        </div>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <strong>🎯 عوامل تاثیرگذار:</strong><br>
+                        ${entry.triggers || 'ثبت نشده'}
+                    </div>
+                    <div style="margin-top:10px;">
+                        <strong>📝 یادداشت:</strong><br>
+                        ${entry.note || 'ثبت نشده'}
+                    </div>
+                `;
+                container.appendChild(entryDiv);
+            });
+
+            document.getElementById('patientResults').classList.remove('hidden');
+        }
+
+        // ==================== توابع پزشک ====================
+
+        function loginDoctor() {
+            const username = document.getElementById('doctor_username').value.trim();
+            const password = document.getElementById('doctor_password').value;
+
+            // اطلاعات پزشک ثابت
+            const doctorCredentials = {
+                username: "doctor",
+                password: "doctor123"
+            };
+
+            if (username === doctorCredentials.username && password === doctorCredentials.password) {
+                currentUserType = 'doctor';
+                currentUser = { fullname: "پزشک مدیر" };
+                
+                document.getElementById('welcomeDoctor').textContent = `🏥 سلام دکتر`;
+                showSection('doctorPanel');
+                loadAllPatients();
+                
+                showMessage('✅ پزشک عزیز، خوش آمدید', 'success', 'doctorMessages');
+            } else {
+                showMessage('❌ اطلاعات ورود پزشک اشتباه است', 'error', 'doctorMessages');
+            }
+        }
+
+        function loadAllPatients() {
+            const container = document.getElementById('doctorPatientsList');
+            container.innerHTML = '';
+            
+            if (allPatients.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:20px; color:#666">هنوز هیچ بیمارانی ثبت نام نکرده‌اند</div>';
+                return;
+            }
+            
+            allPatients.forEach(patient => {
+                const patientItem = document.createElement('div');
+                patientItem.className = 'patient-item';
+                patientItem.onclick = () => showPatientDetails(patient);
+                
+                patientItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${patient.fullname}</strong>
+                            <div style="font-size: 12px; color: #f0f0f0;">
+                                نام کاربری: ${patient.username} | 
+                                تعداد ثبت‌ها: ${patient.data.length} |
+                                آخرین ورود: ${patient.lastLogin}
+                            </div>
+                        </div>
+                        <div style="font-size: 20px;">👁️</div>
+                    </div>
+                `;
+                
+                container.appendChild(patientItem);
+            });
+        }
+
+        function showPatientDetails(patient) {
+            document.getElementById('selectedPatientName').textContent = 
+                `بیمار: ${patient.fullname} (${patient.username})`;
+            
+            const container = document.getElementById('doctorDataContainer');
+            container.innerHTML = '';
+            
+            if (patient.data.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:20px; color:#666">این بیمار هنوز اطلاعاتی ثبت نکرده است</div>';
+            } else {
+                // نمایش داده‌ها به صورت جدول
+                let tableHTML = `
+                    <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #4ecdc4, #44a08d); color: white;">
+                                <th style="padding: 10px; border: 1px solid #ddd;">تاریخ</th>
+                                <th style="padding: 10px; border: 1px solid #ddd;">خواب شب</th>
+                                <th style="padding: 10px; border: 1px solid #ddd;">خواب روز</th>
+                                <th style="padding: 10px; border: 1px solid #ddd;">حالت روحی</th>
+                                <th style="padding: 10px; border: 1px solid #ddd;">داروها</th>
+                                <th style="padding: 10px; border: 1px solid #ddd;">عوامل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                // مرتب‌سازی داده‌ها
+                const sortedData = [...patient.data].sort((a, b) => 
+                    new Date(b.timestamp) - new Date(a.timestamp)
+                );
+                
+                sortedData.forEach(entry => {
+                    const sleepNight = `${entry.sleepNightHours || 0}س ${entry.sleepNightMinutes || 0}د`;
+                    const sleepDay = `${entry.sleepDayHours || 0}س ${entry.sleepDayMinutes || 0}د`;
+                    const mood = getMoodText(entry.mood);
+                    
+                    tableHTML += `
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 8px; border: 1px solid #ddd;">${entry.date}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${sleepNight}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${sleepDay}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${mood}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${entry.medications}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">${entry.triggers || '-'}</td>
+                        </tr>
+                    `;
+                });
+                
+                tableHTML += `
+                        </tbody>
+                    </table>
+                    </div>
+                `;
+                
+                container.innerHTML = tableHTML;
+            }
+            
+            document.getElementById('doctorPatientsList').classList.add('hidden');
+            document.getElementById('doctorPatientDetails').classList.remove('hidden');
+        }
+
+        function backToPatientsList() {
+            document.getElementById('doctorPatientDetails').classList.add('hidden');
+            document.getElementById('doctorPatientsList').classList.remove('hidden');
+        }
+
+        function exportAllData() {
+            let csvContent = "نام بیمار,نام کاربری,تاریخ,ساعت خواب شب,دقیقه خواب شب,ساعت خواب روز,دقیقه خواب روز,حالت روحی,داروها,وضعیت دارو,عوامل تاثیرگذار,یادداشت\n";
+            
+            allPatients.forEach(patient => {
+                patient.data.forEach(entry => {
+                    const row = [
+                        `"${patient.fullname}"`,
+                        `"${patient.username}"`,
+                        `"${entry.date}"`,
+                        entry.sleepNightHours || '0',
+                        entry.sleepNightMinutes || '0',
+                        entry.sleepDayHours || '0',
+                        entry.sleepDayMinutes || '0',
+                        `"${getMoodText(entry.mood)}"`,
+                        `"${entry.medications}"`,
+                        `"${entry.medicationStatus}"`,
+                        `"${entry.triggers || ''}"`,
+                        `"${entry.note || ''}"`
+                    ].join(',');
+                    
+                    csvContent += row + '\n';
+                });
+            });
+
+            downloadCSV(csvContent, 'hamrah-ravan-all-data.csv');
+            showMessage('✅ فایل CSV کلیه داده‌ها دانلود شد', 'success', 'doctorMessages');
+        }
+
+        // ==================== توابع کمکی ====================
+
+        function getMoodText(moodValue) {
+            const moods = {
+                '1': 'خیلی افسرده 😔',
+                '2': 'افسرده 😟', 
+                '3': 'متوسط 😐',
+                '4': 'خوب 🙂',
+                '5': 'عالی 😊'
+            };
+            return moods[moodValue] || 'ثبت نشده';
+        }
+
+        function showMessage(message, type = 'info', containerId = 'patientMessages') {
+            const messagesEl = document.getElementById(containerId);
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error-message' : 'sync-status';
+            messageDiv.textContent = message;
+            messagesEl.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        function saveToCloud() {
+            localStorage.setItem('hamrahRavan_cloud_patients', JSON.stringify(allPatients));
+        }
+
+        function downloadCSV(csvContent, filename) {
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function logoutUser() {
+            currentUser = null;
+            currentUserType = null;
+            showSection('home');
+        }
+
+        // مقداردهی اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            generateSecurityCode('securityCode1');
+            // بارگذاری داده‌ها از فضای ابری
+            allPatients = JSON.parse(localStorage.getItem('hamrahRavan_cloud_patients') || '[]');
+        });
+    </script>
+</body>
+</html>
